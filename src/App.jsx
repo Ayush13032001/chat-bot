@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import ChatBotIcon from "./components/ChatBotIcon";
+import ChatbotIcon from "./components/ChatbotIcon";
 import Chatform from "./components/Chatform";
 import ChatMessage from "./components/ChatMessage";
 import { companyInfo } from "./companyInfo.js";
@@ -91,7 +91,7 @@ const App = () => {
       <div className="chatbot-popup">
         <div className="chat-header">
           <div className="header-info">
-            <ChatBotIcon />
+            <ChatbotIcon />
             <h2 className="logo-text">Chatbot</h2>
           </div>
           <button
@@ -105,7 +105,7 @@ const App = () => {
         <div ref={chatBodyRef} className="chat-body">
           {/* Static greeting */}
           <div className="message bot-message">
-            <ChatBotIcon />
+            <ChatbotIcon />
             <p className="message-text">
               Hey there👋
               <br /> How can I help you today?
