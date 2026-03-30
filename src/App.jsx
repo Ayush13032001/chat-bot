@@ -47,7 +47,8 @@ const App = () => {
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data.error?.message || "Something went wrong!");
+      if (!response.ok)
+        throw new Error(data.error?.message || "Something went wrong!");
 
       const apiText = data.candidates[0].content.parts[0].text
         .replace(/\*\*(.*?)\*\*/g, "$1")
@@ -55,7 +56,9 @@ const App = () => {
 
       // Replace loader with actual response
       setChatHistory((prev) =>
-        prev.map((msg) => (msg.isLoader ? { role: "model", text: apiText } : msg))
+        prev.map((msg) =>
+          msg.isLoader ? { role: "model", text: apiText } : msg,
+        ),
       );
     } catch (err) {
       console.error(err.message);
@@ -63,8 +66,8 @@ const App = () => {
         prev.map((msg) =>
           msg.isLoader
             ? { role: "model", text: "Oops! Something went wrong." }
-            : msg
-        )
+            : msg,
+        ),
       );
     }
   };
@@ -80,53 +83,73 @@ const App = () => {
   }, [chatHistory]);
 
   return (
-    <div className={`container ${showChatbot ? "show-chatbot" : ""}`}>
-      <button onClick={() => setShowChatBot((prev) => !prev)} id="chatbot-toggler">
-        <span className="material-symbols-rounded" style={{ fontSize: "29px", fontVariationSettings: "'FILL' 1" }}>
-          mode_comment
-        </span>
-        <span className="material-symbols-rounded">close</span>
-      </button>
-
-      <div className="chatbot-popup">
-        <div className="chat-header">
-          <div className="header-info">
-            <ChatbotIcon />
-            <h2 className="logo-text">Chatbot</h2>
-          </div>
-          <button
-            onClick={() => setShowChatBot((prev) => !prev)}
+    <>
+      <div style={{ overflow: "hidden", whiteSpace: "nowrap" }}>
+        <h1
+          style={{
+            display: "inline-block",
+            color: "red",
+            paddingTop: "100px",
+            animation: "moveText 10s linear infinite",
+          }}
+        >
+          ⚠️ If chatbot is not responding, it may be due to API limit or expiry
+        </h1>
+      </div>
+      <div className={`container ${showChatbot ? "show-chatbot" : ""}`}>
+        <button
+          onClick={() => setShowChatBot((prev) => !prev)}
+          id="chatbot-toggler"
+        >
+          <span
             className="material-symbols-rounded"
+            style={{ fontSize: "29px", fontVariationSettings: "'FILL' 1" }}
           >
-            keyboard_arrow_down
-          </button>
-        </div>
+            mode_comment
+          </span>
+          <span className="material-symbols-rounded">close</span>
+        </button>
 
-        <div ref={chatBodyRef} className="chat-body">
-          {/* Static greeting */}
-          <div className="message bot-message">
-            <ChatbotIcon />
-            <p className="message-text">
-              Hey there👋
-              <br /> How can I help you today?
-            </p>
+        <div className="chatbot-popup">
+          <div className="chat-header">
+            <div className="header-info">
+              <ChatbotIcon />
+              <h2 className="logo-text">Chatbot</h2>
+            </div>
+            <button
+              onClick={() => setShowChatBot((prev) => !prev)}
+              className="material-symbols-rounded"
+            >
+              keyboard_arrow_down
+            </button>
           </div>
 
-          {/* Dynamic chat messages */}
-          {chatHistory.map((chat, i) => (
-            <ChatMessage key={i} chat={chat} />
-          ))}
-        </div>
+          <div ref={chatBodyRef} className="chat-body">
+            {/* Static greeting */}
+            <div className="message bot-message">
+              <ChatbotIcon />
+              <p className="message-text">
+                Hey there👋
+                <br /> How can I help you today?
+              </p>
+            </div>
 
-        <div className="chat-footer">
-          <Chatform
-            chatHistory={chatHistory}
-            setChatHistory={setChatHistory}
-            generateBotResponse={generateBotResponse}
-          />
+            {/* Dynamic chat messages */}
+            {chatHistory.map((chat, i) => (
+              <ChatMessage key={i} chat={chat} />
+            ))}
+          </div>
+
+          <div className="chat-footer">
+            <Chatform
+              chatHistory={chatHistory}
+              setChatHistory={setChatHistory}
+              generateBotResponse={generateBotResponse}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
